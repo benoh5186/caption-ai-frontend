@@ -18,7 +18,9 @@ function SessionPage(sessionId) {
             try {
                 const data = await fetchSession(sessionId);
                 setTranscriptData(data.transcript);
-                
+                setStyleData(data.session_info)
+                const videoData = await fetchSessionVideo(data.s3_key)
+                setVideoUrl(videoData)
             }
             catch (err) {
                 if (err instanceof SessionLoadError) {
@@ -29,8 +31,7 @@ function SessionPage(sessionId) {
                 setLoading(false)
             }
         }
-
-
+        loadSession()
     },
     [sessionId])
 }

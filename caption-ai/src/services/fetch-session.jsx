@@ -1,5 +1,5 @@
 export async function fetchSession(sessionId) {
-    const response = fetch(`example.com/api/load-session?${encodeURIComponent(sessionId)}`)
+    const response = await fetch(`example.com/api/load-session?${encodeURIComponent(sessionId)}`)
     if (response.ok) {
         const data = await response.json()
         return data 

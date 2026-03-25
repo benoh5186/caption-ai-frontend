@@ -37,5 +37,21 @@ function SessionPage(sessionId) {
         loadSession()
     },
     [sessionId])
-}
+    if (error) {
+        return 
+        <h1>Error: {error}</h1>
+    }
+
+    return 
+        <div>
+            transcriptData ? <Upload 
+            videoFile={videoFile} 
+            setVideoFile={setVideoFile}
+            /> : 
+            <EditSession styleData={styleData} transcript={transcriptData}/>
+
+        </div>
+    }
+
+
 

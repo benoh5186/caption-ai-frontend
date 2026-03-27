@@ -8,7 +8,6 @@ import { EditSession } from "../components/edit";
 
 function SessionPage(sessionId) {
     [videoFile, setVideoFile] = useState(null);
-    [videoUploading, setVideoUploading] = useState(false);
     [videoUrl, setVideoUrl] = useState(null);
     [isLoading, setLoading] = useState(false);
     [transcriptData, setTranscriptData] = useState([]);
@@ -38,20 +37,21 @@ function SessionPage(sessionId) {
     },
     [sessionId])
     if (error) {
-        return 
-        <h1>Error: {error}</h1>
+        return (
+             <h1>Error: {error}</h1>
+            )
     }
 
-    return 
+    return (
         <div>
+            
             transcriptData ? <Upload 
             videoFile={videoFile} 
             setVideoFile={setVideoFile}
             /> : 
             <EditSession styleData={styleData} transcript={transcriptData}/>
 
-        </div>
+        </div>)
     }
-
 
 

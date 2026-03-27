@@ -1,7 +1,7 @@
 import { SessionLoadError } from "../errors/session-load-error"
 
 export async function fetchSession(sessionId) {
-    const response = await fetch(`example.com/api/load-session?${encodeURIComponent(sessionId)}`)
+    const response = await fetch(`localhost:8000/api/load-session?${encodeURIComponent(sessionId)}`)
     if (response.ok) {
         const data = await response.json()
         return data 

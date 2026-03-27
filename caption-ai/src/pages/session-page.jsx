@@ -7,12 +7,12 @@ import { Upload } from "../components/upload";
 import { EditSession } from "../components/edit";
 
 function SessionPage(sessionId) {
-    [videoFile, setVideoFile] = useState(null);
-    [videoUrl, setVideoUrl] = useState(null);
-    [isLoading, setLoading] = useState(false);
-    [transcriptData, setTranscriptData] = useState([]);
-    [styleData, setStyleData] = useState({});
-    [error, setError] = useState(false);
+    const [videoFile, setVideoFile] = useState(null);
+    const [videoUrl, setVideoUrl] = useState(null);
+    const [isLoading, setLoading] = useState(false);
+    const [transcriptData, setTranscriptData] = useState([]);
+    const [styleData, setStyleData] = useState({});
+    const [error, setError] = useState(false);
 
     useEffect(() => {
         async function loadSession() {

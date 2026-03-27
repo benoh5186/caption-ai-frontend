@@ -7,7 +7,6 @@ import { Upload } from "../components/upload";
 import { EditSession } from "../components/edit";
 
 function SessionPage(sessionId) {
-    const [videoFile, setVideoFile] = useState(null);
     const [videoUrl, setVideoUrl] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [transcriptData, setTranscriptData] = useState([]);
@@ -43,13 +42,14 @@ function SessionPage(sessionId) {
     }
 
     return (
-        <div>
-            
+        <div>    
             transcriptData ? <Upload 
-            videoFile={videoFile} 
-            setVideoFile={setVideoFile}
+            videoUrl={videoUrl}
+            setVideoUrl={setVideoUrl}
+            setTranscriptData={setTranscriptData}
+            setStyleData={setStyleData}
             /> : 
-            <EditSession styleData={styleData} transcript={transcriptData}/>
+            <EditSession videoUrl={videoUrl} styleData={styleData} transcript={transcriptData}/>
 
         </div>)
     }

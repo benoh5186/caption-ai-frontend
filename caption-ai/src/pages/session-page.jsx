@@ -10,7 +10,9 @@ function SessionPage(sessionId) {
     const [videoUrl, setVideoUrl] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [transcriptData, setTranscriptData] = useState([]);
+    const [sessionData, setSessionData] = useState({});
     const [styleData, setStyleData] = useState({});
+    const [s3Key, setS3Key] = useState(null);
     const [error, setError] = useState(false);
 
     useEffect(() => {

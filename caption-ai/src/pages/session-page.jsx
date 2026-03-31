@@ -22,8 +22,11 @@ function SessionPage(sessionId) {
                 const data = await fetchSession(sessionId);
                 setTranscriptData(data.transcript);
                 setStyleData(data.session_info)
-                const videoData = await fetchSessionVideo(data.s3_key)
-                setVideoUrl(videoData)
+                if (data.s3_key) {
+                    setS3Key(data.s3_key)
+                    const videoData = await fetchSessionVideo(s3Key)
+                    setVideoUrl(videoData)
+                }
             }
             catch (err) {
                 if (err instanceof SessionLoadError) {
@@ -45,11 +48,9 @@ function SessionPage(sessionId) {
 
     return (
         <div>    
-            transcriptData ? <Upload 
-            videoUrl={videoUrl}
+            videoUrl ? <Upload 
+            sessionId={sessionId}
             setVideoUrl={setVideoUrl}
-            setTranscriptData={setTranscriptData}
-            setStyleData={setStyleData}
             /> : 
             <EditSession videoUrl={videoUrl} styleData={styleData} transcript={transcriptData}/>
 

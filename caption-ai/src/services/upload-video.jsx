@@ -10,6 +10,8 @@ export async function uploadVideo(sessionId, videoFile) {
     })
     if (response.ok) {
         return await response.json()
+    } else {
+        throw new Error("failed to upload")
     }
 
 

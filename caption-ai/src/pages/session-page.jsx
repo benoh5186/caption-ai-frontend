@@ -50,7 +50,11 @@ function SessionPage(sessionId) {
         <div>    
             videoUrl ? <Upload 
             sessionId={sessionId}
-            setVideoUrl={setVideoUrl}
+            onUploadComplete={({videoUrl, s3Key}) => {
+                setVideoUrl(videoUrl)
+                setS3Key(s3Key)
+
+            }}
             /> : 
             <EditSession videoUrl={videoUrl} styleData={styleData} transcript={transcriptData}/>
 

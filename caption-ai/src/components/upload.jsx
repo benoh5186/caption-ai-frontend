@@ -1,12 +1,10 @@
 import { uploadVideo } from "../services/upload-video";
 
-export function Upload(sessionId, setVideoUrl) {
+export function Upload(sessionId, onUploadComplete) {
     const[videoUploading, setVideoUploading] = useState(false);
     const[uploadFailed, setUploadFailed] = useState(false);
     const [isDragging, setDragging] = useState(false);
 
-    //TODO: post uploaded video to the backend, and then render component(to be made) that prompts user to transcribe the video
-    //TODO: after user clicks "transcribe or translate", make api call to fetch transcribe and set transcriptData and stylesData with their setters.
     async function handleDragOver(event) {
         event.preventDefault()
         setDragging(true);
@@ -16,9 +14,7 @@ export function Upload(sessionId, setVideoUrl) {
 
     async function handleUploadInput(event) {
         event.preventDefault()
-        const videoFile = event.target.files[0]
-        setVideoUploading(true);
-        setUploadFailed(false);
+        const videoFile = event.target.files[0];
         handleUpload(videoFile);
     }
 
@@ -26,8 +22,8 @@ export function Upload(sessionId, setVideoUrl) {
         setVideoUploading(true);
         setUploadFailed(false);
         try {
-            await uploadVideo(sessionId, videoFile)
-            setVideoUrl(URL.createObjectURL(videoFile))
+            const {s3Key} = await uploadVideo(sessionId, videoFile)
+            onUploadComplete?.({videoUrl: videoFile, s3Key} )
         }
         catch (error) {
             setUploadFailed(true);

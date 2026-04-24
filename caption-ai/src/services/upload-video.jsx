@@ -1,7 +1,7 @@
 
 
 export async function uploadVideo(sessionId, videoFile) {
-    const response = await fetch(`localhost:8000/api/upload-video?${encodeURIComponent(sessionId)}`
+    const response = await fetch(`localhost:8000/api/upload-video/${encodeURIComponent(sessionId)}`
     , {
         method: "POST",
         headers: {

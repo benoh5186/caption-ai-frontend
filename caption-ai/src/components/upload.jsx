@@ -22,8 +22,8 @@ export function Upload(sessionId, onUploadComplete) {
         setVideoUploading(true);
         setUploadFailed(false);
         try {
-            const {s3Key} = await uploadVideo(sessionId, videoFile)
-            onUploadComplete?.({videoUrl: videoFile, s3Key} )
+            await uploadVideo(sessionId, videoFile)
+            onUploadComplete?.({videoUrl: videoFile} )
         } 
         catch (error) {
             setUploadFailed(true);

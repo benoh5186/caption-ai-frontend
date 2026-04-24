@@ -9,8 +9,8 @@ import { EditSession } from "../components/edit";
 function SessionPage(sessionId) {
     const [videoUrl, setVideoUrl] = useState(null);
     const [isLoading, setLoading] = useState(false);
-    const [transcriptData, setTranscriptData] = useState([]);
-    const [styleData, setStyleData] = useState({});
+    const [transcriptData, setTranscriptData] = useState(null);
+    const [styleData, setStyleData] = useState(null);
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -59,10 +59,18 @@ function SessionPage(sessionId) {
             sessionId={sessionId}
             onUploadComplete={({videoUrl}) => {
                 setVideoUrl(videoUrl)
-
             }}
             /> : 
-            <EditSession videoUrl={videoUrl} styleData={styleData} transcript={transcriptData}/>
+            <EditSession 
+                sessionId={sessionId}
+                videoUrl={videoUrl} 
+                styleData={styleData} 
+                transcript={transcriptData}
+                onTranscribe={({transcript, sessionInfo}) => {
+                    setTranscriptData(transcript)
+                    setStyleData(sessionInfo)
+                }}
+                />
 
         </div>)
     }

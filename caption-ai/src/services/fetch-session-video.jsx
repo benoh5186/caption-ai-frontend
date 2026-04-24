@@ -1,8 +1,8 @@
 import { VideoLoadError } from "../errors/video-load-error"
 import { VideoNotFound } from "../errors/video-not-found"
 
-export async function fetchSessionVideo(s3Object) {
-    const response = await fetch(`localhost:8000/api/load-video?${encodeURIComponent(s3Object)}`)
+export async function fetchSessionVideo(sessionId) {
+    const response = await fetch(`localhost:8000/api/load-video/${encodeURIComponent(sessionId)}`)
     const responseStatus = response.status 
     if (response.ok) {
         const videoBlob = await response.blob()

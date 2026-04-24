@@ -10,9 +10,7 @@ function SessionPage(sessionId) {
     const [videoUrl, setVideoUrl] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [transcriptData, setTranscriptData] = useState([]);
-    const [sessionData, setSessionData] = useState({});
     const [styleData, setStyleData] = useState({});
-    const [s3Key, setS3Key] = useState(null);
     const [error, setError] = useState(false);
 
     useEffect(() => {
@@ -20,16 +18,19 @@ function SessionPage(sessionId) {
             setLoading(true)
             try {
                 const data = await fetchSession(sessionId);
-                setTranscriptData(data.transcript);
-                setStyleData(data.session_info)
-                if (data.s3_key) {
-                    setS3Key(data.s3_key)
-                    const videoData = await fetchSessionVideo(s3Key)
-                    setVideoUrl(videoData)
+                const videoData = await fetchSessionVideo(sessionId);
+                setVideoUrl(videoData)
+                if (data.transcript) {
+                    setTranscriptData(data.transcript);
+                    if (data.session_info) {
+                        setStyleData(data.session_info)
+                    } else {
+                        // make service method that makes default style data
+                    }
                 }
             }
             catch (err) {
-                if (err instanceof SessionLoadError) {
+                if (err instanceof SessionLoadError || err instanceof VideoLoadError) {
                     setError(true)
                 } 
             }
@@ -46,13 +47,18 @@ function SessionPage(sessionId) {
             )
     }
 
+    if (isLoading) {
+        return (
+            <h1>Loading..</h1>
+        )
+    }
+
     return (
         <div>    
             videoUrl ? <Upload 
             sessionId={sessionId}
-            onUploadComplete={({videoUrl, s3Key}) => {
+            onUploadComplete={({videoUrl}) => {
                 setVideoUrl(videoUrl)
-                setS3Key(s3Key)
 
             }}
             /> : 

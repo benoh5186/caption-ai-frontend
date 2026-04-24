@@ -1,7 +1,7 @@
 import {useState} from "react"
-import {StylesTab, SubtitlesTab, SettingsTab} from "../components/tabs"
+import {StylesTab, SubtitlesTab, SettingsTab, TranscribeTab} from "../components/tabs"
 
-export function EditSession({ videoUrl, styleData, transcript }) {
+export function EditSession({ sessionId, videoUrl, styleData, transcript }) {
     const [activeTab, setTab] = useState("styles");
 
     function handleTabClick(tab) {
@@ -58,4 +58,70 @@ export function EditSession({ videoUrl, styleData, transcript }) {
 
         </div>
     )
+}
+
+function EditSideBar() {
+    const [activeTab, setTab] = useState("styles");
+
+    function handleTabClick(tab) {
+        switch(tab) {
+            case "styles":
+                setTab("styles")
+            case "subtitles":
+                setTab("subtitles")
+            case "options":
+                setTab("options")
+            default:
+                setTab("styles")
+        }
+    }
+
+    function renderTabContent() {
+        switch(activeTab) {
+            case "styles":
+                return <StylesTab stylesData={styleData}/>
+            case "subtitles":
+                return <SubtitlesTab transcript={transcript}/>
+            case "options":
+                return <SettingsTab/>
+            default:
+                return <StylesTab stylesData={styleData}/>
+        }
+    }
+    return (
+        <div class="task-editor" id="task-editor">
+            <div class="task-choices">
+                <button class="task-tab" id="task-styles" onClick={handleTabClick("styles")}>
+                    ✨ Styles
+                </button>
+                <button class="task-tab" id="task-subtitles" onClick={handleTabClick("subtitles")}>
+                    💬 Subtitles
+                </button>
+                <button class="task-tab" id="task-options" onClick={handleTabClick("options")}>
+                    🔧 Options
+                </button>
+            </div>
+            <div>
+                {renderTabContent()}
+            </div>
+        </div>
+    )
+
+}
+
+function PreEditSideBar() {
+
+    return(
+        <div class="task-editor" id="task-editor">
+            <div class="task-choices">
+                <button class="task-tab" id="task-transcribe" onClick={handleTabClick("styles")}>
+                    Transcribe
+                </button>
+            </div>
+            <div>
+                <TranscribeTab/>
+            </div>
+        </div>
+    )
+        
 }

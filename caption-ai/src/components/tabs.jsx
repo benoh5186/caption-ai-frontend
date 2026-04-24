@@ -234,7 +234,23 @@ function SettingsTab() {
             </div>
         </div>
     )
+}
 
-
-
+function TranscribeTab() {
+  return (
+      <div className="editor-content" id="option-content">
+        <div className="section-header">Transcribe</div>
+        <div className="control-group">
+          <div className="transcribe-area" id="transcribe-area">
+            <button
+              type="button"
+              className="video-transcribe-button"
+              id="video-transcribe-button"
+            >
+              Transcribe
+            </button>
+          </div>
+        </div>
+      </div>
+  )
 }

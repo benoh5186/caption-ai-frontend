@@ -5,6 +5,7 @@ import { SessionLoadError } from "../errors/session-load-error"
 import { VideoLoadError } from "../errors/video-load-error";
 import { Upload } from "../components/upload";
 import { EditSession } from "../components/edit";
+import { defaultStyleData } from "../services/default-style-data";
 
 function SessionPage(sessionId) {
     const [videoUrl, setVideoUrl] = useState(null);
@@ -25,7 +26,8 @@ function SessionPage(sessionId) {
                     if (data.session_info) {
                         setStyleData(data.session_info)
                     } else {
-                        // make service method that makes default style data
+                        const defaultStyle = defaultStyleData(transcriptData);
+                        setStyleData(defaultStyle);
                     }
                 }
             }

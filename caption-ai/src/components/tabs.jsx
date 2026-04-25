@@ -17,7 +17,7 @@ function StylesTab(stylesData) {
                     name="fontFamily"
                     id="font-family"
                     className="dropdown-menu"
-                    defaultValue={stylesData?.fontFamily ?? "Arial"}
+                    defaultValue={"Arial"}
                   >
                     <option value="Arial">Arial</option>
                     <option value="Helvetica">Helvetica</option>
@@ -34,7 +34,7 @@ function StylesTab(stylesData) {
                     name="fontSize"
                     id="font-size"
                     className="dropdown-menu"
-                    defaultValue={stylesData?.fontSize ?? "24px"}
+                    defaultValue={"24px"}
                   >
                     <option value="16px">16px</option>
                     <option value="24px">24px</option>

@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react"
 
 
-function Login() {
+function Login({ onLoginSuccess}) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -20,10 +20,8 @@ function Login() {
         )
         if (!response.ok) {
             throw new Error()
-
-        } else {
-
         }
+        onLoginSuccess();
     }
 
     

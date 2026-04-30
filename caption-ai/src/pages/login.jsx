@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { checkAuth } from "../services/auth-check"
 
 
-function Login({ onLoginSuccess }) {
+export default function Login({ onLoginSuccess }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -88,5 +88,3 @@ function Login({ onLoginSuccess }) {
         </main>
     )
 }
-
-export default Login

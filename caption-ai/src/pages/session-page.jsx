@@ -2,12 +2,13 @@ import { useState, useEffect } from "react"
 import { fetchSession } from "../services/fetch-session";
 import { fetchSessionVideo } from "../services/fetch-session-video";
 import { SessionLoadError } from "../errors/session-load-error"
+import { SessionExpired } from "../errors/session-expired"
 import { VideoLoadError } from "../errors/video-load-error";
 import { Upload } from "../components/upload";
 import { EditSession } from "../components/edit";
 import { defaultStyleData } from "../services/default-style-data";
 
-function SessionPage(sessionId) {
+export default function SessionPage(sessionId, onSessionExpired) {
     const [videoUrl, setVideoUrl] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [transcriptData, setTranscriptData] = useState(null);
@@ -35,6 +36,9 @@ function SessionPage(sessionId) {
                 if (err instanceof SessionLoadError || err instanceof VideoLoadError) {
                     setError(true)
                 } 
+                else if (err instanceof SessionExpired) {
+                    onSessionExpired()
+                }
             }
             finally {
                 setLoading(false)

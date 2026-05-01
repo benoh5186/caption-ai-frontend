@@ -8,7 +8,7 @@ import { Upload } from "../components/upload";
 import { EditSession } from "../components/edit";
 import { defaultStyleData } from "../services/default-style-data";
 
-export default function SessionPage(sessionId, onSessionExpired) {
+export default function SessionPage({sessionId, onSessionExpired}) {
     const [videoUrl, setVideoUrl] = useState(null);
     const [isLoading, setLoading] = useState(false);
     const [transcriptData, setTranscriptData] = useState(null);

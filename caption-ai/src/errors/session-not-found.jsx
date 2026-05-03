@@ -1,4 +1,4 @@
-class SessionNotFound extends Error {
+export class SessionNotFound extends Error {
   constructor(message) {
     super(message)
     this.name = "SessionNotFound"

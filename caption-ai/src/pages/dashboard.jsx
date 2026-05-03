@@ -2,11 +2,13 @@ import {useState, useEffect} from "react"
 import { fetchSessions } from "../services/fetch-sessions.jsx";
 import SessionPage from './session-page.jsx'
 import { SessionExpired } from "../errors/session-expired"
+import { createSession } from "../services/create-session.jsx";
+import { SessionCountLimit } from "../errors/session-count.jsx";
 
 export default function Dashboard( {onSessionExpired} ) {
     const [sessions, setSessions] = useState([]);
     const [selectedSession, setSelectedSession] = useState(null);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
 
     useEffect(()=> {
         async function loadSessions() {
@@ -18,12 +20,40 @@ export default function Dashboard( {onSessionExpired} ) {
                 if (err instanceof SessionExpired) {
                     onSessionExpired()
                 } 
-                setError(true)
+                setError({
+                    type: "sessions-load",
+                    message: "Failed to load your sessions. Please try again."
+                })
                 return
             }
         }
         loadSessions()
     }, [onSessionExpired])
+
+    async function handleCreateSession() {
+        setError(null);
+        try {
+            const sessionId = await createSession()
+            setSelectedSession(sessionId)
+        } catch (err) {
+            if (err instanceof SessionExpired) {
+                onSessionExpired()
+            } else if (err instanceof SessionCountLimit) {
+                setError({
+                    type: "session-limit",
+                    message: "You have reached the maximum number of sessions."
+                })
+            } else {
+                setError({
+                    type: "create-session",
+                    message: "Something went wrong while creating a session. Please try again."
+                })
+            }
+
+        }
+    }
+
+
 
     if (selectedSession) {
         return (
@@ -36,6 +66,15 @@ export default function Dashboard( {onSessionExpired} ) {
     return (
         <main>
             <section>
+                <button type="button" onClick={handleCreateSession}>
+                    Create new session
+                </button>
+
+                {error && (
+                    <p role="alert">
+                        {error.message}
+                    </p>
+                )}
 
             </section>
             <section>

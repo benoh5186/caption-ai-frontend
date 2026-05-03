@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { checkAuth } from "../services/auth-check"
 
 
-export default function Signup({ onSignUpSuccess }) {
+export default function Signup({ onSignUpSuccess, onLoginClick }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -150,8 +150,14 @@ export default function Signup({ onSignUpSuccess }) {
                         {isSubmitting ? "Creating account..." : "Sign up"}
                     </button>
                 </form>
+
+                <p className="auth-switch">
+                    Already have an account?{" "}
+                    <button type="button" onClick={onLoginClick}>
+                        Log in
+                    </button>
+                </p>
             </section>
         </main>
     )
 }
-

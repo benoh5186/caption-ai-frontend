@@ -16,9 +16,14 @@ function App() {
         return <Dashboard onSessionExpired={() => setAuthPage("login")}/>
     } 
     if (authPage === "signup") {
-        return <Signup onSignupSuccess={() => setAuthPage("login") }/>
+        return <Signup 
+                    onSignupSuccess={() => setAuthPage("login") }
+                    onLoginClick={() => setAuthPage("login")}/>
     }
-    return <Login onLoginSuccess={() => setIsLoggedIn(true)} />
+    return <Login 
+                onLoginSuccess={() => setIsLoggedIn(true)}
+                onSignUpClick={() => setAuthPage("signup")}
+            />
 
 }
 

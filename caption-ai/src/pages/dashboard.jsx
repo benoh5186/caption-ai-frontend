@@ -3,6 +3,7 @@ import { fetchSessions } from "../services/fetch-sessions.jsx";
 import SessionPage from './session-page.jsx'
 import { SessionExpired } from "../errors/session-expired"
 import { createSession } from "../services/create-session.jsx";
+import { deleteSession } from "../services/delete-session.jsx";
 import { SessionCountLimit } from "../errors/session-count.jsx";
 
 export default function Dashboard( {onSessionExpired} ) {
@@ -10,8 +11,7 @@ export default function Dashboard( {onSessionExpired} ) {
     const [selectedSession, setSelectedSession] = useState(null);
     const [error, setError] = useState(null);
 
-    useEffect(()=> {
-        async function loadSessions() {
+    async function loadSessions() {
             try {
                 const data = await fetchSessions()
                 setSessions(data)
@@ -19,14 +19,16 @@ export default function Dashboard( {onSessionExpired} ) {
             catch (err) {
                 if (err instanceof SessionExpired) {
                     onSessionExpired()
+                    return
                 } 
                 setError({
                     type: "sessions-load",
                     message: "Failed to load your sessions. Please try again."
                 })
-                return
             }
-        }
+    }
+
+    useEffect(()=> {
         loadSessions()
     }, [onSessionExpired])
 
@@ -50,6 +52,24 @@ export default function Dashboard( {onSessionExpired} ) {
                 })
             }
 
+        }
+    }
+
+    async function handleDeleteSession(sessionId) {
+        setError(null);
+        try {
+            await deleteSession(sessionId)
+            await loadSessions()
+
+        } catch (err) {
+            if (err instanceof SessionExpired) {
+                onSessionExpired()
+                return
+            }
+            setError({
+                type: "delete-session",
+                message: "Failed to delete the session. Please try again."
+            })
         }
     }
 
@@ -79,8 +99,9 @@ export default function Dashboard( {onSessionExpired} ) {
             </section>
             <section>
                 <SessionList
-                sessions={sessions}
-                onSelectSession={setSelectedSession}
+                    sessions={sessions}
+                    onSelectSession={setSelectedSession}
+                    onDeleteSession={handleDeleteSession}
                 />
             </section>
             
@@ -89,16 +110,11 @@ export default function Dashboard( {onSessionExpired} ) {
     
 }
 
-function SessionList({sessions, onSelectSession}) {
+function SessionList({sessions, onSelectSession, onDeleteSession}) {
     return (
         <div className="session-grid">
             {sessions.map((session) => (
-                <button
-                    key={session.session_id} 
-                    type="button"
-                    onClick={() => onSelectSession(session.session_id)}
-                    className="session-card"
-                 >
+                <article key={session.session_id} className="session-card">
                     <img 
                         src={session.thumbnail_url} 
                         alt=""
@@ -106,9 +122,21 @@ function SessionList({sessions, onSelectSession}) {
                     />
                     <div className="session-card-body">
                         <h3>{session.title}</h3>
+                        <button
+                            type="button"
+                            onClick={() => onSelectSession(session.session_id)}
+                        >
+                            Open
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => onDeleteSession(session.session_id)}
+                        >
+                            Delete
+                        </button>
                     </div>
 
-                </button>
+                </article>
             ))}
         </div>   
     )

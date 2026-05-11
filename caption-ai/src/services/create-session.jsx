@@ -3,7 +3,7 @@ import { SessionCountLimit } from "../errors/session-count"
 
 
 export async function createSession() {
-    const response = await fetch("/api/v1/create-session", {
+    const response = await fetch("http://localhost:8000/api/v1/session/create-session", {
         credentials: "include"
     })
 

@@ -1,7 +1,7 @@
 import { SessionExpired } from "../errors/session-expired"
 
 export async function deleteSession(sessionId) {
-    const response = await fetch(`/api/v1/delete-session?session_id=${encodeURIComponent(sessionId)}`, {
+    const response = await fetch(`http://localhost:8000/api/v1/session/delete-session?session_id=${encodeURIComponent(sessionId)}`, {
         method: "DELETE",
         credentials: "include"
     })

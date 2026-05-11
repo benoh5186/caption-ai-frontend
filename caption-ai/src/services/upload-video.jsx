@@ -1,19 +1,20 @@
 
 
 export async function uploadVideo(sessionId, videoFile) {
-    const response = await fetch(`localhost:8000/api/upload-video/${encodeURIComponent(sessionId)}`
+    const formData = new FormData();
+    formData.append("video", videoFile);
+
+    const response = await fetch(`http://localhost:8000/api/v1/session/upload-video/${encodeURIComponent(sessionId)}`
     , {
         method: "POST",
-        headers: {
-            "Content-Type" : videoFile.type 
-        }, body: videoFile
+        credentials: "include",
+        body: formData,
     })
+
     if (response.ok) {
-        return await response.json()
-    } else {
-        throw new Error("failed to upload")
+        return
     }
 
-
-
+    const message = await response.text()
+    throw new Error(message || "failed to upload")
 }

@@ -1,9 +1,9 @@
 
-function CaptionTab() {
+export function CaptionTab() {
 
 }
 
-function StylesTab(stylesData) {
+export function StylesTab({stylesData}) {
   return (
           <div className="editor-content" id="styles-content">
             <div className="section-header">Typography</div>
@@ -201,7 +201,7 @@ function StylesTab(stylesData) {
   )
 }
 
-function SubtitlesTab(transcript) {
+export function SubtitlesTab(transcript) {
   return (
     <div className="editor-content" id="subtitles-content">
         <div className="section-header">Transcript</div>
@@ -216,7 +216,7 @@ function SubtitlesTab(transcript) {
 
 }
 
-function SettingsTab() {
+export function SettingsTab() {
 
     return (
         <div className="editor-content" id="option-content">
@@ -236,7 +236,7 @@ function SettingsTab() {
     )
 }
 
-function TranscribeTab() {
+export function TranscribeTab() {
   return (
       <div className="editor-content" id="option-content">
         <div className="section-header">Transcribe</div>

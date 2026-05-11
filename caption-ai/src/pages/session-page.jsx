@@ -60,25 +60,29 @@ export default function SessionPage({sessionId, onSessionExpired}) {
     }
 
     return (
-        <div>    
-            videoUrl ? <Upload 
-            sessionId={sessionId}
-            onUploadComplete={({videoUrl}) => {
-                setVideoUrl(videoUrl)
-            }}
-            /> : 
-            <EditSession 
-                sessionId={sessionId}
-                videoUrl={videoUrl} 
-                styleData={styleData} 
-                transcript={transcriptData}
-                onTranscribe={({transcript, sessionInfo}) => {
-                    setTranscriptData(transcript)
-                    setStyleData(sessionInfo)
-                }}
+        <div>
+            {videoUrl ? (
+                <EditSession 
+                    sessionId={sessionId}
+                    videoUrl={videoUrl} 
+                    styleData={styleData} 
+                    transcript={transcriptData}
+                    onTranscribe={({ transcript, sessionInfo }) => {
+                        setTranscriptData(transcript)
+                        setStyleData(sessionInfo)
+                    }}
                 />
+            ) : (
+                <Upload 
+                    sessionId={sessionId}
+                    onUploadComplete={({ videoUrl }) => {
+                        setVideoUrl(videoUrl)
+                    }}
+                />
+            )}
+        </div>
+    )
 
-        </div>)
     }
 
 

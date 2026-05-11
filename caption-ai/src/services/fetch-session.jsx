@@ -3,7 +3,7 @@ import { SessionNotFound } from "../errors/session-not-found"
 import { SessionExpired } from "../errors/session-expired"
 
 export async function fetchSession(sessionId) {
-    const response = await fetch(`localhost:8000/api/load-session?${encodeURIComponent(sessionId)}`,
+    const response = await fetch(`http://localhost:8000/api/v1/session/load-session/${encodeURIComponent(sessionId)}`,
     {credentials: "include"
     })
     const status = response.status

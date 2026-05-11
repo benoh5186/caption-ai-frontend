@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { checkAuth } from "../services/auth-check"
 
 
-export default function Signup({ onSignUpSuccess, onLoginClick }) {
+export default function Signup({ onSignupSuccess, onLoginClick }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -16,11 +16,11 @@ export default function Signup({ onSignUpSuccess, onLoginClick }) {
         async function authenticateUser() {
             const isAuthenticated = await checkAuth()
             if (isAuthenticated) {
-                onSignUpSuccess()
+                onSignupSuccess()
             }
         }
         authenticateUser()
-    }, [onSignUpSuccess])
+    }, [onSignupSuccess])
 
     function checkPassword() {
         if (password === confirmPassword) {
@@ -54,7 +54,7 @@ export default function Signup({ onSignUpSuccess, onLoginClick }) {
         setError(false)
 
         try {
-            const response = await fetch("/api/v1/signup", {
+            const response = await fetch("http://localhost:8000/api/v1/auth/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -64,7 +64,7 @@ export default function Signup({ onSignUpSuccess, onLoginClick }) {
             })
             const status = response.status
             if (response.ok) {
-                onSignUpSuccess()
+                onSignupSuccess()
             } else if (status === 422) {
                 const data = await response.json()
                 setFieldErrors(data.detail)

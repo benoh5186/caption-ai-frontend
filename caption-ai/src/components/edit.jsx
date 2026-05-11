@@ -1,16 +1,35 @@
 import {useState} from "react"
 import {StylesTab, SubtitlesTab, SettingsTab, TranscribeTab} from "../components/tabs"
 import { fetchSession } from "../services/fetch-session";
+import { fetchTranscript } from "../services/fetch-transcript";
+import { defaultStyleData } from "../services/default-style-data";
+import Subtitle from "./subtitle";
 
 export function EditSession({ sessionId, videoUrl, styleData, transcript, onTranscribe }) {
     const hasTranscript = transcript != null;
+    const [currentTime, setCurrentTime] = useState(0);
+
 
     return (
         <div className="video-edit-section" id="video-edit-section" >
             <div class="video-preview" id="video-preview">
-                <video className="video-player" id="video-player" controls src={videoUrl}>
+                <video 
+                    className="video-player" 
+                    id="video-player" 
+                    controls src={videoUrl}
+                    onTimeUpdate={(event) => {
+                        setCurrentTime(event.currentTarget.currentTime);
+                    }}
+                    >
                 </video>
                 <div className="subtitle-container" id="subtitle-container">
+                    {hasTranscript && (
+                      <Subtitle
+                        styleData={styleData}
+                        transcript={transcript}
+                        timeStamp={currentTime}
+                      />
+                    )}
                 </div>
             </div>
 
@@ -54,13 +73,13 @@ function EditSideBar({ styleData, transcript}) {
     return (
         <div className="task-editor" id="task-editor">
             <div className="task-choices">
-                <button className="task-tab" id="task-styles" onClick={handleTabClick("styles")}>
+                <button className="task-tab" id="task-styles" onClick={() => handleTabClick("styles")}>
                     ✨ Styles
                 </button>
-                <button className="task-tab" id="task-subtitles" onClick={handleTabClick("subtitles")}>
+                <button className="task-tab" id="task-subtitles" onClick={() => handleTabClick("subtitles")}>
                     💬 Subtitles
                 </button>
-                <button className="task-tab" id="task-options" onClick={handleTabClick("options")}>
+                <button className="task-tab" id="task-options" onClick={() => handleTabClick("options")}>
                     🔧 Options
                 </button>
             </div>
@@ -74,8 +93,9 @@ function EditSideBar({ styleData, transcript}) {
 
 function PreEditSideBar({sessionId, onTranscribe}) {
     async function handleTranscribe() {
-        const data = await fetchSession(sessionId)
-        onTranscribe?.({transcript: data.transcript, sessionInfo: data.session_info})
+        const transcriptData = await fetchTranscript(sessionId)
+        const styleData = defaultStyleData(transcriptData)
+        onTranscribe?.({transcriptData, styleData})
 
     }
 

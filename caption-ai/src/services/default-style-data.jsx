@@ -2,7 +2,7 @@ export function defaultStyleData() {
   return {
     globalStyle: {
       fontFamily: "Arial",
-      fontSize: "16px",
+      fontSize: "15px",
       bold: false,
       italic: false,
       textColor: "#000000",
@@ -22,6 +22,6 @@ export function getSegmentStyle(styleData, segmentId) {
     return {
         ...defaultData.globalStyle,
         ...(styleData.globalStyle ?? {}),
-        ...(styleData.segmentStyles[segmentId] ?? {}),
+        ...(styleData.segmentStyles?.[segmentId] ?? {}),
     }
 }

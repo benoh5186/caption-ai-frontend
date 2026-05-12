@@ -5,7 +5,7 @@ import { fetchTranscript } from "../services/fetch-transcript";
 import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";
 
-export function EditSession({ sessionId, videoUrl, styleData, transcript, onTranscribe }) {
+export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe }) {
     const hasTranscript = transcript != null;
     const [currentTime, setCurrentTime] = useState(0);
 
@@ -34,7 +34,12 @@ export function EditSession({ sessionId, videoUrl, styleData, transcript, onTran
             </div>
 
             {hasTranscript ? (
-                <EditSideBar styleData={styleData} transcript={transcript} />
+                <EditSideBar 
+                    styleData={styleData} 
+                    setStyleData={setStyleData}
+                    transcript={transcript}
+                    setTranscript={setTranscript}
+                     />
             ) : (
                 <PreEditSideBar sessionId={sessionId} onTranscribe={onTranscribe} />
             )}
@@ -42,32 +47,63 @@ export function EditSession({ sessionId, videoUrl, styleData, transcript, onTran
     )
 }
 
-function EditSideBar({ styleData, transcript}) {
+function EditSideBar({ styleData, setStyleData, transcript, setTranscript}) {
     const [activeTab, setTab] = useState("styles");
 
     function handleTabClick(tab) {
         switch(tab) {
             case "styles":
-                setTab("styles")
+                setTab("styles");
+                break;
             case "subtitles":
-                setTab("subtitles")
+                setTab("subtitles");
+                break;
             case "options":
-                setTab("options")
+                setTab("options");
+                break;
             default:
-                setTab("styles")
+                setTab("styles");
         }
     }
 
     function renderTabContent() {
         switch(activeTab) {
             case "styles":
-                return <StylesTab stylesData={styleData}/>
+                return <StylesTab 
+                            stylesData={styleData} 
+                            onStyleChange={(updates) => {
+                                setStyleData((current) => {
+                                    const next = current ?? defaultStyleData();
+
+                                    return {
+                                        ...next,
+                                        globalStyle: {
+                                            ...next.globalStyle,
+                                            ...updates
+                                        }
+                                    }
+                                })
+                            }}/>
             case "subtitles":
-                return <SubtitlesTab transcript={transcript}/>
+                return <SubtitlesTab transcript={transcript} setTranscript={setTranscript}/>
             case "options":
                 return <SettingsTab/>
             default:
-                return <StylesTab stylesData={styleData}/>
+                return <StylesTab 
+                            stylesData={styleData}
+                            onStyleChange={(updates) => {
+                                setStyleData((current) => {
+                                    const next = current ?? defaultStyleData();
+
+                                    return {
+                                        ...next,
+                                        globalStyle: {
+                                            ...next.globalStyle,
+                                            ...updates
+                                        }
+                                    }
+                                })
+                            }}/>
         }
     }
     return (

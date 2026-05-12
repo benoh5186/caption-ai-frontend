@@ -66,6 +66,8 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                     sessionId={sessionId}
                     videoUrl={videoUrl} 
                     styleData={styleData} 
+                    setStyleData={setStyleData}
+                    setTranscript={setTranscriptData}
                     transcript={transcriptData}
                     onTranscribe={({ transcript, sessionInfo }) => {
                         setTranscriptData(transcript)

@@ -12,7 +12,7 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
 
     return (
         <div className="video-edit-section" id="video-edit-section" >
-            <div class="video-preview" id="video-preview">
+            <div className="video-preview" id="video-preview">
                 <video 
                     className="video-player" 
                     id="video-player" 
@@ -39,6 +39,8 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
                     setStyleData={setStyleData}
                     transcript={transcript}
                     setTranscript={setTranscript}
+                    currentTime={currentTime}
+                    setCurrentTime={setCurrentTime}
                      />
             ) : (
                 <PreEditSideBar sessionId={sessionId} onTranscribe={onTranscribe} />
@@ -47,7 +49,7 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
     )
 }
 
-function EditSideBar({ styleData, setStyleData, transcript, setTranscript}) {
+function EditSideBar({ styleData, setStyleData, transcript, setTranscript, currentTime, setCurrentTime}) {
     const [activeTab, setTab] = useState("styles");
 
     function handleTabClick(tab) {
@@ -85,7 +87,12 @@ function EditSideBar({ styleData, setStyleData, transcript, setTranscript}) {
                                 })
                             }}/>
             case "subtitles":
-                return <SubtitlesTab transcript={transcript} setTranscript={setTranscript}/>
+                return <SubtitlesTab 
+                            transcript={transcript} 
+                            setTranscript={setTranscript}
+                            currentTime={currentTime}
+                            setCurrentTime={setCurrentTime}
+                            />
             case "options":
                 return <SettingsTab/>
             default:
@@ -138,7 +145,7 @@ function PreEditSideBar({sessionId, onTranscribe}) {
     return(
         <div className="task-editor" id="task-editor">
             <div className="task-choices">
-                <button class="task-tab" id="task-transcribe" onClick={handleTranscribe}>
+                <button className="task-tab" id="task-transcribe" onClick={handleTranscribe}>
                     Transcribe
                 </button>
             </div>

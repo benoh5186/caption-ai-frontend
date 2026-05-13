@@ -1,3 +1,5 @@
+import TranscriptSegments from "./transcript"
+
 
 export function CaptionTab() {
 
@@ -213,16 +215,38 @@ export function StylesTab({stylesData, onStyleChange}) {
   )
 }
 
-export function SubtitlesTab({transcript, setTranscript}) {
+export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrentTime}) {
   return (
     <div className="editor-content" id="subtitles-content">
         <div className="section-header">Transcript</div>
       <div className="control-group">
-          <div className="transcript-area" id="transcript-area">
-            {Array.isArray(transcript) ? transcript.length : 0} transcript items
+            <TranscriptSegments
+              transcript={transcript}
+              onTranscriptChange={
+                (segmentId, newText) =>
+                  setTranscript((current) => {
+                    return {
+                      ...current,
+                      segments : 
+                        current.segments.map((segment) => {
+                          if (segmentId !== segment.id) {
+                            return segment
+                          } 
+                          return {
+                            ...segment,
+                            text : newText}
+                        })
+                    }
+                  })
+              }
+              timeStamp={currentTime}
+              onTimeStampChange={
+                (newTime) =>
+                setCurrentTime(newTime)
+              }
+            />
         </div>
       </div>
-    </div>
   )
 
 

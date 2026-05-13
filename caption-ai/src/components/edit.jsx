@@ -1,4 +1,4 @@
-import {useState} from "react"
+import {useState, useRef} from "react"
 import {StylesTab, SubtitlesTab, SettingsTab, TranscribeTab} from "../components/tabs"
 import { fetchSession } from "../services/fetch-session";
 import { fetchTranscript } from "../services/fetch-transcript";
@@ -8,12 +8,21 @@ import Subtitle from "./subtitle";
 export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe }) {
     const hasTranscript = transcript != null;
     const [currentTime, setCurrentTime] = useState(0);
+    const videoRef = useRef(null);
+
+    function handleVideoTimeChange(newTime) {
+        setCurrentTime(newTime)
+        if (videoRef.current) {
+            videoRef.current.currentTime = newTime
+        }
+    }
 
 
     return (
         <div className="video-edit-section" id="video-edit-section" >
             <div className="video-preview" id="video-preview">
-                <video 
+                <video
+                    ref={videoRef} 
                     className="video-player" 
                     id="video-player" 
                     controls src={videoUrl}
@@ -40,7 +49,7 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
                     transcript={transcript}
                     setTranscript={setTranscript}
                     currentTime={currentTime}
-                    setCurrentTime={setCurrentTime}
+                    setCurrentTime={handleVideoTimeChange}
                      />
             ) : (
                 <PreEditSideBar sessionId={sessionId} onTranscribe={onTranscribe} />

@@ -14,6 +14,7 @@ export async function saveSession(sessionId, title, transcript, styleData) {
             )
         }
     )
+    const status = response.status
     if (response.ok) {
         return
     } else if (status === 401) {

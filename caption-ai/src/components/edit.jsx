@@ -1,6 +1,5 @@
 import {useState, useRef} from "react"
 import {StylesTab, SubtitlesTab, SettingsTab, TranscribeTab} from "../components/tabs"
-import { fetchSession } from "../services/fetch-session";
 import { fetchTranscript } from "../services/fetch-transcript";
 import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";

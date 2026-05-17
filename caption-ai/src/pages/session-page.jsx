@@ -7,7 +7,7 @@ import { VideoLoadError } from "../errors/video-load-error";
 import { Upload } from "../components/upload";
 import { EditSession } from "../components/edit";
 import { defaultStyleData } from "../services/default-style-data";
-import { saveSession } from "../services/save-session";
+import { autoSave, requestSave } from "../services/save-session";
 
 export default function SessionPage({sessionId, onSessionExpired}) {
     const [videoUrl, setVideoUrl] = useState(null);
@@ -17,6 +17,8 @@ export default function SessionPage({sessionId, onSessionExpired}) {
     const [title, setTitle] = useState(null);
     const [error, setError] = useState(false);
     const latestSessionRef = useRef(null);
+    const saveInFlightRef = useRef(false);
+    const pendingSaveRef = useRef(false);
 
     useEffect(() => {
         async function loadSession() {
@@ -55,14 +57,12 @@ export default function SessionPage({sessionId, onSessionExpired}) {
             if (!sessionData?.transcriptData || !sessionData?.styleData) {
               return;
             }
-            saveSession(
+            requestSave(
                 sessionId, 
-                sessionData.title, 
-                sessionData.transcriptData,
-                sessionData.styleData)
-            .catch(() => {
-                console.log("failed to save session")
-            })
+                latestSessionRef,
+                pendingSaveRef,
+                saveInFlightRef
+            )
         }
     },
     [sessionId])
@@ -73,6 +73,13 @@ export default function SessionPage({sessionId, onSessionExpired}) {
             transcriptData: transcriptData,
             title: title
         }
+        const timeOutId = autoSave(
+                        sessionId, 
+                        latestSessionRef, 
+                        pendingSaveRef,
+                        saveInFlightRef
+                    )
+        return () => clearTimeout(timeOutId)
     }, [styleData, transcriptData, title])
 
 
@@ -92,6 +99,12 @@ export default function SessionPage({sessionId, onSessionExpired}) {
 
     return (
         <div>
+            <input
+                className="session-title"
+                value={title ?? ""}
+                onChange={(event) => setTitle(event.target.value)}
+            />
+
             {videoUrl ? (
                 <EditSession 
                     sessionId={sessionId}

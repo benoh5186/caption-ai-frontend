@@ -1,11 +1,11 @@
 import {useState, useRef} from "react"
-import {StylesTab, SubtitlesTab, SettingsTab, TranscribeTab} from "../components/tabs"
+import {StylesTab, SubtitlesTab, SettingsTab} from "../components/tabs"
 import { fetchTranscript } from "../services/fetch-transcript";
 import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";
 import { SessionExpired } from "../errors/session-expired";
 
-export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired }) {
+export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError }) {
     const hasTranscript = transcript != null;
     const [currentTime, setCurrentTime] = useState(0);
     const videoRef = useRef(null);
@@ -44,25 +44,29 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
 
             {hasTranscript ? (
                 <EditSideBar 
+                    sessionId={sessionId}
                     styleData={styleData} 
                     setStyleData={setStyleData}
                     transcript={transcript}
                     setTranscript={setTranscript}
                     currentTime={currentTime}
                     setCurrentTime={handleVideoTimeChange}
+                    onSessionExpired={onSessionExpired}
+                    onError={onError}
                      />
             ) : (
                 <PreEditSideBar 
                     sessionId={sessionId} 
                     onTranscribe={onTranscribe} 
                     onSessionExpired={onSessionExpired} 
+                    onError={onError}
                     />
             )}
         </div>
     )
 }
 
-function EditSideBar({ styleData, setStyleData, transcript, setTranscript, currentTime, setCurrentTime}) {
+function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTranscript, currentTime, setCurrentTime, onSessionExpired, onError}) {
     const [activeTab, setTab] = useState("styles");
 
     function handleTabClick(tab) {
@@ -107,7 +111,7 @@ function EditSideBar({ styleData, setStyleData, transcript, setTranscript, curre
                             setCurrentTime={setCurrentTime}
                             />
             case "options":
-                return <SettingsTab/>
+                return <SettingsTab sessionId={sessionId} onSessionExpired={onSessionExpired} onError={onError}/>
             default:
                 return <StylesTab 
                             stylesData={styleData}
@@ -147,10 +151,9 @@ function EditSideBar({ styleData, setStyleData, transcript, setTranscript, curre
 
 }
 
-function PreEditSideBar({sessionId, onTranscribe, onSessionExpired}) {
-    const [error, setError] = useState(false);
+function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError}) {
     async function handleTranscribe() {
-        setError(false)
+        onError(null);
         try {
             const transcriptData = await fetchTranscript(sessionId)
             const styleData = defaultStyleData(transcriptData)
@@ -160,16 +163,13 @@ function PreEditSideBar({sessionId, onTranscribe, onSessionExpired}) {
             if (err instanceof SessionExpired) {
                 onSessionExpired()
             } else {
-                setError(true)
+                onError({message: err.message})
             }
         }
     }
 
     return(
         <div className="task-editor" id="task-editor">
-            {error && (
-                <p className="error"> Error has occurred. Please try again</p>
-            )}
             <div className="task-choices">
                 <button className="task-tab" id="task-transcribe" onClick={handleTranscribe}>
                     Transcribe

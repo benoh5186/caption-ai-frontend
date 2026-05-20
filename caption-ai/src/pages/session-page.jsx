@@ -15,7 +15,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
     const [transcriptData, setTranscriptData] = useState(null);
     const [styleData, setStyleData] = useState(null);
     const [title, setTitle] = useState(null);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     const latestSessionRef = useRef(null);
     const saveInFlightRef = useRef(false);
     const pendingSaveRef = useRef(false);
@@ -99,6 +99,9 @@ export default function SessionPage({sessionId, onSessionExpired}) {
 
     return (
         <div>
+            {error && (
+            <p className="error"> {error.message} </p>
+            )}
             <input
                 className="session-title"
                 value={title ?? ""}
@@ -113,17 +116,23 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                     setStyleData={setStyleData}
                     setTranscript={setTranscriptData}
                     transcript={transcriptData}
-                    onTranscribe={({ transcript, sessionInfo }) => {
-                        setTranscriptData(transcript)
-                        setStyleData(sessionInfo)
+                    onTranscribe={({ transcriptData, styleData }) => {
+                        setTranscriptData(transcriptData)
+                        setStyleData(styleData)
                     }}
                     onSessionExpired={onSessionExpired}
+                    onError = {(err) => {
+                        setError(err)
+                    }}
                 />
             ) : (
                 <Upload 
                     sessionId={sessionId}
                     onUploadComplete={({ videoUrl }) => {
                         setVideoUrl(videoUrl)
+                    }}
+                    onError={(err) => {
+                        setError(err)
                     }}
                 />
             )}

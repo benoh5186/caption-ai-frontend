@@ -1,5 +1,6 @@
 import TranscriptSegments from "./transcript"
 import { downloadVideo } from "../services/download-video"
+import { SessionExpired } from "../errors/session-expired"
 
 
 export function CaptionTab() {
@@ -253,8 +254,21 @@ export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrent
 
 }
 
-export function SettingsTab() {
-
+export function SettingsTab({sessionId, onSessionExpired, onError}) {
+    async function handleDownload() {
+      onError(null)
+      try {
+          downloadVideo(sessionId)
+      } 
+      catch (err) {
+        if (err instanceof SessionExpired) {
+          onSessionExpired()
+          return 
+        } else {
+          onError({message: err.message})
+        }
+      }
+    }
     return (
         <div className="editor-content" id="option-content">
             <div className="section-header">Download</div>
@@ -264,6 +278,7 @@ export function SettingsTab() {
                   type="button"
                   className="video-download-button"
                   id="video-download-button"
+                  onClick={handleDownload}
                 >
                   download
                 </button>

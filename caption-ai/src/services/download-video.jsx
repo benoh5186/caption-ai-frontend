@@ -19,6 +19,7 @@ export async function downloadVideo(sessionId) {
         document.body.removeChild(link)
 
         URL.revokeObjectURL(url)
+        return
 
     } else if (status === 401) {
             throw new SessionExpired("Session expired.")

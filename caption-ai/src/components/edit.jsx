@@ -3,8 +3,9 @@ import {StylesTab, SubtitlesTab, SettingsTab, TranscribeTab} from "../components
 import { fetchTranscript } from "../services/fetch-transcript";
 import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";
+import { SessionExpired } from "../errors/session-expired";
 
-export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe }) {
+export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired }) {
     const hasTranscript = transcript != null;
     const [currentTime, setCurrentTime] = useState(0);
     const videoRef = useRef(null);
@@ -51,7 +52,11 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
                     setCurrentTime={handleVideoTimeChange}
                      />
             ) : (
-                <PreEditSideBar sessionId={sessionId} onTranscribe={onTranscribe} />
+                <PreEditSideBar 
+                    sessionId={sessionId} 
+                    onTranscribe={onTranscribe} 
+                    onSessionExpired={onSessionExpired} 
+                    />
             )}
         </div>
     )
@@ -142,16 +147,29 @@ function EditSideBar({ styleData, setStyleData, transcript, setTranscript, curre
 
 }
 
-function PreEditSideBar({sessionId, onTranscribe}) {
+function PreEditSideBar({sessionId, onTranscribe, onSessionExpired}) {
+    const [error, setError] = useState(false);
     async function handleTranscribe() {
-        const transcriptData = await fetchTranscript(sessionId)
-        const styleData = defaultStyleData(transcriptData)
-        onTranscribe?.({transcriptData, styleData})
-
+        setError(false)
+        try {
+            const transcriptData = await fetchTranscript(sessionId)
+            const styleData = defaultStyleData(transcriptData)
+            onTranscribe?.({transcriptData, styleData})
+        }
+        catch (err) {
+            if (err instanceof SessionExpired) {
+                onSessionExpired()
+            } else {
+                setError(true)
+            }
+        }
     }
 
     return(
         <div className="task-editor" id="task-editor">
+            {error && (
+                <p className="error"> Error has occurred. Please try again</p>
+            )}
             <div className="task-choices">
                 <button className="task-tab" id="task-transcribe" onClick={handleTranscribe}>
                     Transcribe

@@ -117,6 +117,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                         setTranscriptData(transcript)
                         setStyleData(sessionInfo)
                     }}
+                    onSessionExpired={onSessionExpired}
                 />
             ) : (
                 <Upload 

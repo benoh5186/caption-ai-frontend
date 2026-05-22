@@ -8,12 +8,15 @@ export function CaptionTab() {
 
 }
 
-export function StylesTab({stylesData, onStyleChange, segmentId = null}) {
+export function StylesTab({stylesData, onStyleChange, segmentId = null, onBack = null}) {
   const style = getSegmentStyle(stylesData, segmentId)
   const updateStyle = (updates) => onStyleChange?.(updates)
 
   return (
           <div className="editor-content" id="styles-content">
+            {onBack && (
+              <button className="back-button" type="button" onClick={onBack}>Back</button>
+            )}
             <div className="section-header">Typography</div>
             <div className="control-group typography-section" id="typography-section">
               <div className="control-row">

@@ -23,6 +23,7 @@ export default function TranscriptSegments({transcript, onTranscriptChange, time
                         }
                 })}
                 segmentId={segmentId}
+                onBack={() => setEditSegment(null)}
             />
         )
     }

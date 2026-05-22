@@ -1,14 +1,15 @@
 import TranscriptSegments from "./transcript"
 import { downloadVideo } from "../services/download-video"
 import { SessionExpired } from "../errors/session-expired"
+import { getSegmentStyle } from "../services/default-style-data"
 
 
 export function CaptionTab() {
 
 }
 
-export function StylesTab({stylesData, onStyleChange}) {
-  const style = stylesData?.globalStyle ?? {}
+export function StylesTab({stylesData, onStyleChange, segmentId = null}) {
+  const style = getSegmentStyle(stylesData, segmentId)
   const updateStyle = (updates) => onStyleChange?.(updates)
 
   return (
@@ -217,7 +218,7 @@ export function StylesTab({stylesData, onStyleChange}) {
   )
 }
 
-export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrentTime}) {
+export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrentTime, styleData, setStyleData}) {
   return (
     <div className="editor-content" id="subtitles-content">
         <div className="section-header">Transcript</div>
@@ -246,6 +247,8 @@ export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrent
                 (newTime) =>
                 setCurrentTime(newTime)
               }
+              styleData={styleData}
+              setStyleData={setStyleData}
             />
         </div>
       </div>

@@ -109,6 +109,8 @@ function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTransc
                             setTranscript={setTranscript}
                             currentTime={currentTime}
                             setCurrentTime={setCurrentTime}
+                            styleData={styleData}
+                            setStyleData={setStyleData}
                             />
             case "options":
                 return <SettingsTab sessionId={sessionId} onSessionExpired={onSessionExpired} onError={onError}/>

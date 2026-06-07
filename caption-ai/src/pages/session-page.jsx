@@ -19,6 +19,17 @@ export default function SessionPage({sessionId, onSessionExpired}) {
     const latestSessionRef = useRef(null);
     const saveInFlightRef = useRef(false);
     const pendingSaveRef = useRef(false);
+    const [job, setJob] = useState(null);
+
+    useEffect(() => {
+        const intervalId = setInterval(async () => {
+            // fetch function 
+
+        })
+        return () => clearInterval(intervalId)
+    },[job])
+
+
 
     useEffect(() => {
         async function loadSession() {
@@ -123,6 +134,10 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                     onSessionExpired={onSessionExpired}
                     onError = {(err) => {
                         setError(err)
+                    }}
+                    job={job}
+                    onSetJob={(jobId) => {
+                        setJob({jobId : jobId, completed: null})
                     }}
                 />
             ) : (

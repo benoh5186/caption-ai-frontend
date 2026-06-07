@@ -5,7 +5,7 @@ import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";
 import { SessionExpired } from "../errors/session-expired";
 
-export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError }) {
+export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError, job, onSetJob }) {
     const hasTranscript = transcript != null;
     const [currentTime, setCurrentTime] = useState(0);
     const videoRef = useRef(null);

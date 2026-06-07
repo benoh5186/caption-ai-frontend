@@ -4,10 +4,12 @@ import { fetchSessionVideo } from "../services/fetch-session-video";
 import { SessionLoadError } from "../errors/session-load-error"
 import { SessionExpired } from "../errors/session-expired"
 import { VideoLoadError } from "../errors/video-load-error";
+import { JobNotFound } from "../errors/job-not-found";
 import { Upload } from "../components/upload";
 import { EditSession } from "../components/edit";
 import { defaultStyleData } from "../services/default-style-data";
 import { autoSave, requestSave } from "../services/save-session";
+import { checkJobStatus } from "../services/check-job-status";
 
 export default function SessionPage({sessionId, onSessionExpired}) {
     const [videoUrl, setVideoUrl] = useState(null);
@@ -23,9 +25,30 @@ export default function SessionPage({sessionId, onSessionExpired}) {
 
     useEffect(() => {
         const intervalId = setInterval(async () => {
-            // fetch function 
+            try {
+                const status = checkJobStatus(job.id)
+                if (status === true) {
+                    setJob((prev) => {
+                        return {...prev, completed: true}
+                    })
+                } else {
+                    setJob((prev) => {
+                        return {...prev, completed: false}
+                    })
+                }
+                clearInterval(intervalId)
 
-        })
+            }
+            catch (err) {
+                if (err instanceof JobNotFound) {
+                    setJob(null)
+                } else if (err instanceof SessionExpired) {
+                    onSessionExpired()
+                }
+                clearInterval(intervalId)
+            }
+
+        }, 5000)
         return () => clearInterval(intervalId)
     },[job])
 

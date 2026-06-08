@@ -162,6 +162,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                     onSetJob={(jobId) => {
                         setJob({jobId : jobId, completed: null})
                     }}
+                    onJobFail={() => setJob(null)}
                 />
             ) : (
                 <Upload 

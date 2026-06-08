@@ -1,7 +1,7 @@
 import { SessionExpired } from "../errors/session-expired"
 
-export async function fetchTranscript(sessionId) {
-    const response = await fetch(`http://localhost:8000/api/v1/transcribe/transcribe/${encodeURIComponent(sessionId)}`,
+export async function fetchTranscript(sessionId, endpointType) {
+    const response = await fetch(`http://localhost:8000/api/v1/transcribe/${endpointType}/${encodeURIComponent(sessionId)}`,
     {
         method: "POST",
         credentials: "include",
@@ -12,6 +12,6 @@ export async function fetchTranscript(sessionId) {
     } else if (status === 401) {
         throw new SessionExpired("Session Expired")
     } else {
-        throw new Error("failed to transcribe")
+        throw new Error()
     }
 }

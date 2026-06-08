@@ -1,11 +1,11 @@
-import {useState, useRef} from "react"
+import {useState, useRef, useEffect} from "react"
 import {StylesTab, SubtitlesTab, SettingsTab} from "../components/tabs"
 import { fetchTranscript } from "../services/fetch-transcript";
 import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";
 import { SessionExpired } from "../errors/session-expired";
 
-export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError, job, onSetJob }) {
+export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError, job, onSetJob, onJobFail }) {
     const hasTranscript = transcript != null;
     const [currentTime, setCurrentTime] = useState(0);
     const videoRef = useRef(null);
@@ -60,6 +60,9 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
                     onTranscribe={onTranscribe} 
                     onSessionExpired={onSessionExpired} 
                     onError={onError}
+                    job={job}
+                    onSetJob={onSetJob}
+                    onJobFail={onJobFail}
                     />
             )}
         </div>
@@ -153,11 +156,22 @@ function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTransc
 
 }
 
-function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError}) {
-    async function handleTranscribe() {
+function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job, onSetJob, onJobFail}) {
+    useEffect(() => {
+        if (job?.complete === null) return
+        else if (job?.complete === false) {
+            onError({message: "Failed to transcribe. Please try again."})
+            onJobFail()
+            return
+        }
+        getTranscript()
+    },
+     [job])
+
+    async function getTranscript() {
         onError(null);
         try {
-            const transcriptData = await fetchTranscript(sessionId)
+            const transcriptData = await fetchTranscript(sessionId, "transcript")
             const styleData = defaultStyleData(transcriptData)
             onTranscribe?.({transcriptData, styleData})
         }
@@ -165,17 +179,35 @@ function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError}) {
             if (err instanceof SessionExpired) {
                 onSessionExpired()
             } else {
-                onError({message: err.message})
+                onError({message: "Failed to fetch the transcript."})
+            }
+        }
+    }
+    async function transcribe() {
+        onError(null);
+        try {
+            const jobId = await fetchTranscript(sessionId, "transcribe")
+            onSetJob(jobId)
+        } catch (err) {
+            if (err instanceof SessionExpired) {
+                onSessionExpired()
+            } else {
+                onError({message: "Failed to transcribe. Please try again."})
             }
         }
     }
 
     return(
         <div className="task-editor" id="task-editor">
-            <div className="task-choices">
-                <button className="task-tab" id="task-transcribe" onClick={handleTranscribe}>
+            <div className="task-choices"> 
+                {!job ? 
+                (<button className="task-tab" id="task-transcribe" onClick={transcribe}>
                     Transcribe
-                </button>
+                </button>): 
+                (
+                <button className="task-tab" id="task-transcribe" disabled>
+                    Transcribing..
+                </button>)}
             </div>
             <div>
                 <TranscribeTab/>

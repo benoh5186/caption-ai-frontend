@@ -3,6 +3,7 @@ import { downloadVideo } from "../services/download-video"
 import { SessionExpired } from "../errors/session-expired"
 import { getSegmentStyle } from "../services/default-style-data"
 import { exportVideo } from "../services/export-video"
+import { useEffect } from "react"
 
 
 export function CaptionTab() {
@@ -263,7 +264,7 @@ export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrent
 
 export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob, onJobFail}) {
     useEffect(() => {
-      if (job?.complete === false) {
+      if (job?.completed === false) {
         onJobFail()
         onError({message: "Failed to export. Please try again."})
         return
@@ -313,7 +314,7 @@ export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob
                     Export Video 
                   </button>
 
-                ) : job.complete ? (
+                ) : job.completed ? (
                   <button
                     type="button"
                     className="video-download-button"

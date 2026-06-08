@@ -1,7 +1,7 @@
 import { SessionExpired } from "../errors/session-expired"
 
 export async function exportVideo(sessionId) {
-    const response = await fetch(`http://localhost:8000/api/v1/transcribe/export${encodeURIComponent(sessionId)}`, {
+    const response = await fetch(`http://localhost:8000/api/v1/transcribe/export/${encodeURIComponent(sessionId)}`, {
         method: "POST",
         credentials: "include"
     })

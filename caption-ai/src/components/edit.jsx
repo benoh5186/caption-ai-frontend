@@ -161,8 +161,8 @@ function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTransc
 
 function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job, onSetJob, onJobFail}) {
     useEffect(() => {
-        if (job?.complete === null) return
-        else if (job?.complete === false) {
+        if (job?.completed === null) return
+        else if (job?.completed === false) {
             onError({message: "Failed to transcribe. Please try again."})
             onJobFail()
             return

@@ -2,7 +2,7 @@ import { SessionExpired } from "../errors/session-expired"
 import { JobNotFound } from "../errors/job-not-found"
 
 export async function checkJobStatus(jobId) {
-    const response = await fetch(`http://localhost:8000/api/v1/export-status/${encodeURIComponent(jobId)}`, {
+    const response = await fetch(`http://localhost:8000/api/v1/transcribe/export-status/${encodeURIComponent(jobId)}`, {
         method: "GET"
     })
     const status = response.status 

@@ -24,20 +24,14 @@ export default function SessionPage({sessionId, onSessionExpired}) {
     const [job, setJob] = useState(null);
 
     useEffect(() => {
+        if (job === null) return;
         const intervalId = setInterval(async () => {
             try {
-                const status = checkJobStatus(job.id)
-                if (status === true) {
-                    setJob((prev) => {
-                        return {...prev, completed: true}
-                    })
-                } else {
-                    setJob((prev) => {
-                        return {...prev, completed: false}
-                    })
-                }
-                clearInterval(intervalId)
-
+                const status = await checkJobStatus(job.jobId)
+                setJob((prev) => ({...prev, completed: status}))
+                if (status === true || status === false) {
+                    clearInterval(intervalId)
+                } 
             }
             catch (err) {
                 if (err instanceof JobNotFound) {
@@ -50,7 +44,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
 
         }, 5000)
         return () => clearInterval(intervalId)
-    },[job])
+    },[job?.jobId])
 
 
 

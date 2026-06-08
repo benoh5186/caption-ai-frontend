@@ -53,6 +53,9 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
                     setCurrentTime={handleVideoTimeChange}
                     onSessionExpired={onSessionExpired}
                     onError={onError}
+                    job={job}
+                    onSetJob={onSetJob}
+                    onJobFail={onJobFail}
                      />
             ) : (
                 <PreEditSideBar 
@@ -69,7 +72,7 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
     )
 }
 
-function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTranscript, currentTime, setCurrentTime, onSessionExpired, onError}) {
+function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTranscript, currentTime, setCurrentTime, onSessionExpired, onError, job, onSetJob, onJobFail}) {
     const [activeTab, setTab] = useState("styles");
 
     function handleTabClick(tab) {
@@ -116,7 +119,7 @@ function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTransc
                             setStyleData={setStyleData}
                             />
             case "options":
-                return <SettingsTab sessionId={sessionId} onSessionExpired={onSessionExpired} onError={onError}/>
+                return <SettingsTab sessionId={sessionId} onSessionExpired={onSessionExpired} onError={onError} job={job} onSetJob={onSetJob} onJobFail={onJobFail}/>
             default:
                 return <StylesTab 
                             stylesData={styleData}
@@ -186,8 +189,8 @@ function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job
     async function transcribe() {
         onError(null);
         try {
-            const jobId = await fetchTranscript(sessionId, "transcribe")
-            onSetJob(jobId)
+            const responseJSon = await fetchTranscript(sessionId, "transcribe")
+            onSetJob(responseJSon.job_id)
         } catch (err) {
             if (err instanceof SessionExpired) {
                 onSessionExpired()

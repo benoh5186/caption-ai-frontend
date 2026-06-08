@@ -2,6 +2,7 @@ import TranscriptSegments from "./transcript"
 import { downloadVideo } from "../services/download-video"
 import { SessionExpired } from "../errors/session-expired"
 import { getSegmentStyle } from "../services/default-style-data"
+import { exportVideo } from "../services/export-video"
 
 
 export function CaptionTab() {
@@ -260,7 +261,16 @@ export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrent
 
 }
 
-export function SettingsTab({sessionId, onSessionExpired, onError}) {
+export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob, onJobFail}) {
+    useEffect(() => {
+      if (job?.complete === false) {
+        onJobFail()
+        onError({message: "Failed to export. Please try again."})
+        return
+      } 
+    
+    }, [job])
+
     async function handleDownload() {
       onError(null)
       try {
@@ -275,19 +285,54 @@ export function SettingsTab({sessionId, onSessionExpired, onError}) {
         }
       }
     }
+    async function handleExport() {
+      onError(null)
+      try {
+        const responseJson = await exportVideo(sessionId)
+        onSetJob(responseJson.job_id)
+      } catch (err) {
+        if (err instanceof SessionExpired) {
+          onSessionExpired()
+        } else {
+          onError({message: "Failed to export. Please try again."})
+        }
+      }
+    }
     return (
         <div className="editor-content" id="option-content">
             <div className="section-header">Download</div>
             <div className="control-group">
               <div className="download-area" id="download-area">
-                <button
-                  type="button"
-                  className="video-download-button"
-                  id="video-download-button"
-                  onClick={handleDownload}
-                >
-                  download
-                </button>
+                {job === null ? (
+                  <button
+                    type="button"
+                    className="video-download-button"
+                    id="video-download-button"
+                    onClick={handleExport}
+                  >
+                    Export Video 
+                  </button>
+
+                ) : job.complete ? (
+                  <button
+                    type="button"
+                    className="video-download-button"
+                    id="video-download-button"
+                    onClick={handleDownload}
+                  >
+                    Download Video
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className="video-download-button"
+                    id="video-download-button"
+                    disabled
+                  >
+                    Exporting..
+                  </button>
+                )}
+                
               </div>
             </div>
         </div>

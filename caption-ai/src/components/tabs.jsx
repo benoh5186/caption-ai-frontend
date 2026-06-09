@@ -275,12 +275,12 @@ export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob
     async function handleDownload() {
       onError(null)
       try {
-          downloadVideo(sessionId)
+          downloadVideo(job?.jobId)
       } 
       catch (err) {
         if (err instanceof SessionExpired) {
           onSessionExpired()
-          return 
+           
         } else {
           onError({message: err.message})
         }

@@ -42,7 +42,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                 clearInterval(intervalId)
             }
 
-        }, 5000)
+        }, 10000)
         return () => clearInterval(intervalId)
     },[job?.jobId])
 
@@ -115,7 +115,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
 
     if (error) {
         return (
-             <h1>Error: {error}</h1>
+             <h1>Error: {error.message}</h1>
             )
     }
 

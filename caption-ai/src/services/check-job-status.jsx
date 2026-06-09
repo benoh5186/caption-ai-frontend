@@ -3,7 +3,8 @@ import { JobNotFound } from "../errors/job-not-found"
 
 export async function checkJobStatus(jobId) {
     const response = await fetch(`http://localhost:8000/api/v1/transcribe/export-status/${encodeURIComponent(jobId)}`, {
-        method: "GET"
+        method: "GET",
+        credentials: "include"
     })
     const status = response.status 
     if (response.ok) {

@@ -161,6 +161,7 @@ function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTransc
 
 function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job, onSetJob, onJobFail}) {
     useEffect(() => {
+        if (job === null) return  
         if (job?.completed === null) return
         else if (job?.completed === false) {
             onError({message: "Failed to transcribe. Please try again."})
@@ -169,7 +170,7 @@ function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job
         }
         getTranscript()
     },
-     [job])
+     [job?.completed])
 
     async function getTranscript() {
         onError(null);
@@ -211,9 +212,6 @@ function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job
                 <button className="task-tab" id="task-transcribe" disabled>
                     Transcribing..
                 </button>)}
-            </div>
-            <div>
-                <TranscribeTab/>
             </div>
         </div>
     )

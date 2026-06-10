@@ -27,7 +27,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
         if (job === null) return;
         const intervalId = setInterval(async () => {
             try {
-                const status = await checkJobStatus(job.jobId)
+                const status = await checkJobStatus(job.jobId, sessionId)
                 setJob((prev) => ({...prev, completed: status}))
                 if (status === true || status === false) {
                     clearInterval(intervalId)
@@ -64,6 +64,9 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                         const defaultStyle = defaultStyleData(transcriptData);
                         setStyleData(defaultStyle);
                     }
+                }
+                if (data.job_id) {
+                    setJob({jobId: data.job_id, completed: null})
                 }
             }
             catch (err) {
@@ -110,14 +113,6 @@ export default function SessionPage({sessionId, onSessionExpired}) {
         return () => clearTimeout(timeOutId)
     }, [styleData, transcriptData, title])
 
-
-
-
-    if (error) {
-        return (
-             <h1>Error: {error.message}</h1>
-            )
-    }
 
     if (isLoading) {
         return (

@@ -1,8 +1,8 @@
 import { SessionExpired } from "../errors/session-expired"
 import { JobNotFound } from "../errors/job-not-found"
 
-export async function checkJobStatus(jobId) {
-    const response = await fetch(`http://localhost:8000/api/v1/transcribe/export-status/${encodeURIComponent(jobId)}`, {
+export async function checkJobStatus(jobId, sessionId) {
+    const response = await fetch(`http://localhost:8000/api/v1/transcribe/export-status/${encodeURIComponent(jobId)}/${encodeURIComponent(sessionId)}`, {
         method: "GET",
         credentials: "include"
     })

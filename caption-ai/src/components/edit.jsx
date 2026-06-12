@@ -5,7 +5,7 @@ import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";
 import { SessionExpired } from "../errors/session-expired";
 
-export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError, job, onSetJob, onJobFail }) {
+export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError, job, onSetJob, onClearJob }) {
     const hasTranscript = transcript != null;
     const [currentTime, setCurrentTime] = useState(0);
     const videoRef = useRef(null);
@@ -55,7 +55,7 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
                     onError={onError}
                     job={job}
                     onSetJob={onSetJob}
-                    onJobFail={onJobFail}
+                    onClearJob={onClearJob}
                      />
             ) : (
                 <PreEditSideBar 
@@ -65,14 +65,14 @@ export function EditSession({ sessionId, videoUrl, styleData, setStyleData, tran
                     onError={onError}
                     job={job}
                     onSetJob={onSetJob}
-                    onJobFail={onJobFail}
+                    onClearJob={onClearJob}
                     />
             )}
         </div>
     )
 }
 
-function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTranscript, currentTime, setCurrentTime, onSessionExpired, onError, job, onSetJob, onJobFail}) {
+function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTranscript, currentTime, setCurrentTime, onSessionExpired, onError, job, onSetJob, onClearJob}) {
     const [activeTab, setTab] = useState("styles");
 
     function handleTabClick(tab) {
@@ -119,7 +119,7 @@ function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTransc
                             setStyleData={setStyleData}
                             />
             case "options":
-                return <SettingsTab sessionId={sessionId} onSessionExpired={onSessionExpired} onError={onError} job={job} onSetJob={onSetJob} onJobFail={onJobFail}/>
+                return <SettingsTab sessionId={sessionId} onSessionExpired={onSessionExpired} onError={onError} job={job} onSetJob={onSetJob} onClearJob={onClearJob}/>
             default:
                 return <StylesTab 
                             stylesData={styleData}
@@ -159,13 +159,13 @@ function EditSideBar({ sessionId, styleData, setStyleData, transcript, setTransc
 
 }
 
-function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job, onSetJob, onJobFail}) {
+function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job, onSetJob, onClearJob}) {
     useEffect(() => {
         if (job === null) return  
         if (job?.completed === null) return
         else if (job?.completed === false) {
             onError({message: "Failed to transcribe. Please try again."})
-            onJobFail()
+            onClearJob()
             return
         }
         getTranscript()
@@ -178,6 +178,7 @@ function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job
             const transcriptData = await fetchTranscript(sessionId, "transcript")
             const styleData = defaultStyleData(transcriptData)
             onTranscribe?.({transcriptData, styleData})
+            onClearJob()
         }
         catch (err) {
             if (err instanceof SessionExpired) {

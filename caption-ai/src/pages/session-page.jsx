@@ -27,7 +27,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
         if (job === null) return;
         const intervalId = setInterval(async () => {
             try {
-                const status = await checkJobStatus(job.jobId, sessionId)
+                const status = await checkJobStatus(job.jobId)
                 setJob((prev) => ({...prev, completed: status}))
                 if (status === true || status === false) {
                     clearInterval(intervalId)
@@ -64,9 +64,6 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                         const defaultStyle = defaultStyleData(transcriptData);
                         setStyleData(defaultStyle);
                     }
-                }
-                if (data.job_id) {
-                    setJob({jobId: data.job_id, completed: null})
                 }
             }
             catch (err) {
@@ -151,7 +148,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                     onSetJob={(jobId) => {
                         setJob({jobId : jobId, completed: null})
                     }}
-                    onJobFail={() => setJob(null)}
+                    onClearJob={() => setJob(null)}
                 />
             ) : (
                 <Upload 

@@ -262,10 +262,10 @@ export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrent
 
 }
 
-export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob, onJobFail}) {
+export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob, onClearJob}) {
     useEffect(() => {
       if (job?.completed === false) {
-        onJobFail()
+        onClearJob()
         onError({message: "Failed to export. Please try again."})
         return
       } 

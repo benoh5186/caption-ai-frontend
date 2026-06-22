@@ -1,5 +1,6 @@
 export function defaultStyleData() {
   return {
+    captionStyle: "kineticWordCaption",
     globalStyle: {
       fontFamily: "Arial",
       fontSize: "15px",
@@ -20,6 +21,7 @@ export function getSegmentStyle(styleData, segmentId) {
         return defaultData.globalStyle
     }
     return {
+        ...defaultData.captionStyle,
         ...defaultData.globalStyle,
         ...(styleData.globalStyle ?? {}),
         ...(styleData.segmentStyles?.[segmentId] ?? {}),

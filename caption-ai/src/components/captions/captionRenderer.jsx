@@ -1,4 +1,5 @@
 import { KineticWordCaption } from "./kineticWordCaption"
+import { DefaultCaption } from "./defaultCaption"
 
 export function CaptionRenderer({videoCurrentTime, segmentStyle, segment}) {
     const captionStyle = segmentStyle?.captionStyle 

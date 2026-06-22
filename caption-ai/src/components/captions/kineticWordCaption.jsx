@@ -1,3 +1,4 @@
+import "./css/caption.css"
 import "./css/kineticCaption.css"
 
 

@@ -95,18 +95,18 @@ export function StylesTab({stylesData, onStyleChange, segmentId = null, onBack =
                     <div
 	                      className="color-preview"
 	                      id="text-color-preview"
-	                      style={{ backgroundColor: style.textColor ?? "#000000" }}
+	                      style={{ backgroundColor: style.color ?? "#000000" }}
 	                    />
 	                    <input
 	                      type="color"
 	                      className="color-input"
 	                      id="text-color"
-	                      value={style.textColor ?? "#000000"}
-	                      onChange={(event) => updateStyle({ textColor: event.target.value })}
+	                      value={style.color ?? "#000000"}
+	                      onChange={(event) => updateStyle({ color: event.target.value })}
 	                    />
 	                    <div className="color-info">
 	                      <div className="color-name" id="text-name">
-	                        {style.textColor ?? "#000000"}
+	                        {style.color ?? "#000000"}
 	                      </div>
 	                    </div>
                   </div>

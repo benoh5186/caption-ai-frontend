@@ -11,7 +11,7 @@ export function KineticWordCaption({videoCurrentTime, segmentStyle, segment}) {
                 fontSize: segmentStyle.fontSize,
                 fontWeight: segmentStyle.bold ? "700" : "400",
                 fontStyle: segmentStyle.italic ? "italic" : "normal",
-                color: segmentStyle.textColor,
+                color: segmentStyle.color,
                 backgroundColor: segmentStyle.backgroundColor,
             }}
         >

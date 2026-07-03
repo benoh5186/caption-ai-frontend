@@ -6,7 +6,7 @@ export function defaultStyleData() {
       fontSize: "15px",
       bold: false,
       italic: false,
-      textColor: "#000000",
+      color: "#000000",
       backgroundColor: "#ffffff",
       backgroundOpacity: 1,
       outlineColor: "#000000",

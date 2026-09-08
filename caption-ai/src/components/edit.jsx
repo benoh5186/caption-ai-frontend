@@ -191,7 +191,7 @@ function PreEditSideBar({sessionId, onTranscribe, onSessionExpired, onError, job
     async function transcribe() {
         onError(null);
         try {
-            const responseJSon = await fetchTranscript(sessionId, "transcribe")
+            const responseJSon = await fetchTranscript(sessionId, "transcribe_v2")
             onSetJob(responseJSon.job_id)
         } catch (err) {
             if (err instanceof SessionExpired) {

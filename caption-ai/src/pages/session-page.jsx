@@ -159,6 +159,13 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                     onError={(err) => {
                         setError(err)
                     }}
+                    job={job}
+                    onSetJob={(jobId) => {
+                        setJob({JobId : jobId, completed: null} )
+                    }}
+                    onClearJob={() => {
+                        setJob(null)
+                    }}
                 />
             )}
         </div>

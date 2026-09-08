@@ -1,10 +1,31 @@
 import { uploadVideo } from "../services/upload-video";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function Upload({sessionId, onUploadComplete}) {
+export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onClearJob}) {
     const[videoUploading, setVideoUploading] = useState(false);
+    const [videoUrl, setVideoUrl] = useState(null);
     const[uploadFailed, setUploadFailed] = useState(false);
     const [isDragging, setDragging] = useState(false);
+
+    useEffect(() => {
+        if (job === null) return;
+        if (job?.completed === null) return;
+        else if (job?.completed === false) {
+            setUploadFailed(true)
+            setVideoUrl(null)
+            onClearJob()
+            return 
+        } else if (job?.completed === true) {
+            if (videoUrl === null) {
+                setUploadFailed(true)
+                return 
+            }
+            onUploadComplete?.(videoUrl.videoUrl)
+            onClearJob()
+            return 
+        }
+    }, 
+    [job?.completed])
 
     async function handleDragOver(event) {
         event.preventDefault()
@@ -33,8 +54,9 @@ export function Upload({sessionId, onUploadComplete}) {
         setVideoUploading(true);
         setUploadFailed(false);
         try {
-            await uploadVideo(sessionId, videoFile)
-            onUploadComplete?.({videoUrl: URL.createObjectURL(videoFile)} )
+            const uploadJobId = await uploadVideo(sessionId, videoFile)
+            onSetJob(uploadJobId)
+            setVideoUrl({videoUrl: URL.createObjectURL(videoFile)})
         } 
         catch {
             setUploadFailed(true);
@@ -49,6 +71,9 @@ export function Upload({sessionId, onUploadComplete}) {
             <div>Uploading..</div>
         )
     }
+    if (uploadFailed) {
+        onError({"message" : "Failed to upload. Please try again."})
+    }
     return (
         <div onDragOver={handleDragOver} onDrop={handleDrop}>
             upload video 
@@ -58,7 +83,6 @@ export function Upload({sessionId, onUploadComplete}) {
                 onChange={handleUploadInput}
             />
             {isDragging && <p>Drop video here</p>}
-            {uploadFailed && <p role="alert">Upload failed. Please try again.</p>}
         </div>
 
     )

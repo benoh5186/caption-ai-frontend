@@ -34,6 +34,7 @@ export default function Login({ onLoginSuccess, onSignUpClick }) {
             })
 
             if (!response.ok) {
+                console.log(response.status)
                 setError(true)
                 return
             }

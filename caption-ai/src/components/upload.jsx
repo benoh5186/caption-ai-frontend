@@ -14,14 +14,17 @@ export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onC
             setUploadFailed(true)
             setVideoUrl(null)
             onClearJob()
+            setVideoUploading(false);
             return 
         } else if (job?.completed === true) {
             if (videoUrl === null) {
                 setUploadFailed(true)
+                setVideoUploading(false);
                 return 
             }
             onUploadComplete?.(videoUrl.videoUrl)
             onClearJob()
+            setVideoUploading(false);
             return 
         }
     }, 
@@ -65,8 +68,6 @@ export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onC
         } 
         catch {
             setUploadFailed(true);
-        } finally {
-            setVideoUploading(false);
         }
     }
 

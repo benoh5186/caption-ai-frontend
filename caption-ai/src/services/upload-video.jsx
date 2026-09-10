@@ -25,7 +25,12 @@ export async function uploadVideo(sessionId, videoFile) {
         if (!uploadResponse.ok) {
             throw new Error("Failed to Upload")
         } else {
-            const videoJob = await fetch(`http://localhost:8000/api/v1/session/save-video-metadata/${sessionId}`)
+            const videoJob = await fetch(`http://localhost:8000/api/v1/session/save-video-metadata/${sessionId}`,
+                {
+                    method : "POST",
+                    credentials : "include"
+                }
+            )                                                       
             if (videoJob.ok) {
                 const vidJobResponse = await videoJob.json()
                 return vidJobResponse.job_id 

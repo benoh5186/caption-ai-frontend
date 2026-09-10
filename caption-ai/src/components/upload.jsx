@@ -27,6 +27,11 @@ export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onC
     }, 
     [job?.completed])
 
+    useEffect(() => {
+        if (uploadFailed) onError({"message" : "Failed to upload. Please try again."})
+    }, 
+    [uploadFailed])
+
     async function handleDragOver(event) {
         event.preventDefault()
         setDragging(true);
@@ -70,9 +75,6 @@ export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onC
         return (
             <div>Uploading..</div>
         )
-    }
-    if (uploadFailed) {
-        onError({"message" : "Failed to upload. Please try again."})
     }
     return (
         <div onDragOver={handleDragOver} onDrop={handleDrop}>

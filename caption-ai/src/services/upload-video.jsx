@@ -8,7 +8,7 @@ export async function uploadVideo(sessionId, videoFile) {
     , {
         method: "POST",
         credentials: "include",
-        body: JSON.stringify({"Content-Type" : videoType}),
+        body: JSON.stringify({ContentType : videoType}),
     })
 
     if (response.ok) {

@@ -161,7 +161,7 @@ export default function SessionPage({sessionId, onSessionExpired}) {
                     }}
                     job={job}
                     onSetJob={(jobId) => {
-                        setJob({JobId : jobId, completed: null} )
+                        setJob({jobId : jobId, completed: null} )
                     }}
                     onClearJob={() => {
                         setJob(null)

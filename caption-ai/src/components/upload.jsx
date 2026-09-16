@@ -1,5 +1,6 @@
 import { uploadVideo } from "../services/upload-video";
 import { useEffect, useState } from "react";
+import {fetchSessionVideo} from "../services/fetch-session-video"
 
 export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onClearJob}) {
     const[videoUploading, setVideoUploading] = useState(false);
@@ -18,11 +19,13 @@ export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onC
             return 
         } else if (job?.completed === true) {
             if (videoUrl === null) {
+                console.log("Video url is none!")
                 setUploadFailed(true)
                 setVideoUploading(false);
                 return 
             }
-            onUploadComplete?.(videoUrl.videoUrl)
+            console.log(`here is vid url: ${videoUrl.videoUrl}`)
+            onUploadComplete?.(videoUrl)
             onClearJob()
             setVideoUploading(false);
             return 
@@ -64,6 +67,7 @@ export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onC
         try {
             const uploadJobId = await uploadVideo(sessionId, videoFile)
             onSetJob(uploadJobId)
+            const vidBlob = await 
             setVideoUrl({videoUrl: URL.createObjectURL(videoFile)})
         } 
         catch {

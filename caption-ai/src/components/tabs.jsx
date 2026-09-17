@@ -3,7 +3,7 @@ import { downloadVideo } from "../services/download-video"
 import { SessionExpired } from "../errors/session-expired"
 import { getSegmentStyle } from "../services/default-style-data"
 import { exportVideo } from "../services/export-video"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import "./tabs.css"
 
 
@@ -264,6 +264,8 @@ export function SubtitlesTab({transcript, setTranscript, currentTime, setCurrent
 }
 
 export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob, onClearJob}) {
+    const [downloading, setDownloading] = useState(false);
+
     useEffect(() => {
       if (job?.completed === false) {
         onClearJob()
@@ -275,8 +277,9 @@ export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob
 
     async function handleDownload() {
       onError(null)
+      setDownloading(true)
       try {
-          downloadVideo(job?.jobId)
+          await downloadVideo(job?.jobId)
       } 
       catch (err) {
         if (err instanceof SessionExpired) {
@@ -285,6 +288,9 @@ export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob
         } else {
           onError({message: err.message})
         }
+      }
+      finally {
+        setDownloading(false)
       }
     }
     async function handleExport() {
@@ -321,8 +327,9 @@ export function SettingsTab({sessionId, onSessionExpired, onError, job, onSetJob
                     className="video-download-button"
                     id="video-download-button"
                     onClick={handleDownload}
+                    disabled={downloading}
                   >
-                    Download Video
+                    {downloading ? "Downloading...." : "Download Video"}
                   </button>
                 ) : (
                   <button

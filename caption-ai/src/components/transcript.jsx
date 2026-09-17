@@ -1,6 +1,7 @@
 import { StylesTab } from "./tabs"
 import { defaultStyleData } from "../services/default-style-data"
 import { useState } from "react"
+import "./transcript.css"
 
 export default function TranscriptSegments({transcript, onTranscriptChange, timeStamp, onTimeStampChange, styleData, setStyleData}) {
     const [editSegmentId, setEditSegment] = useState(null);

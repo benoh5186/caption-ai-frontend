@@ -1,0 +1,24 @@
+.session-title {
+  width: min(1180px, calc(100% - 32px));
+  display: block;
+  margin: 24px auto 18px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 0 0 12px;
+  color: var(--text-h);
+  background: transparent;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  font-weight: 750;
+}
+
+.session-title:focus-visible {
+  outline: none;
+  border-bottom-color: var(--accent);
+}
+
+@media (max-width: 720px) {
+  .session-title {
+    width: min(100% - 20px, 1180px);
+  }
+}

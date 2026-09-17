@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import './App.css'
 import Dashboard from './pages/dashboard.jsx'
 import Login from "./pages/login.jsx"
 import Signup from "./pages/signup.jsx"

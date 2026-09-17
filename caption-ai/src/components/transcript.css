@@ -1,0 +1,48 @@
+.transcript-area {
+  display: grid;
+  gap: 12px;
+  max-height: calc(100svh - 260px);
+  overflow: auto;
+  padding-right: 4px;
+}
+
+.segment {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  background: #ffffff;
+}
+
+.segment.active {
+  border-color: rgba(37, 99, 235, 0.45);
+  background: var(--accent-soft);
+}
+
+.segment h4 {
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.segment .edit {
+  min-height: 30px;
+  padding: 0 10px;
+  color: var(--accent);
+  background: #ffffff;
+  border-color: var(--border);
+  font-size: 0.82rem;
+}
+
+.segment textarea {
+  grid-column: 1 / -1;
+  min-height: 86px;
+  line-height: 1.45;
+}
+
+@media (max-width: 900px) {
+  .transcript-area {
+    max-height: none;
+  }
+}

@@ -1,0 +1,66 @@
+.login-page,
+.signup-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 32px 20px;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 30%),
+    linear-gradient(135deg, #f7f8fb 0%, #eef3f8 100%);
+}
+
+.login-panel,
+.signup-panel {
+  width: min(100%, 440px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow);
+}
+
+.login-panel h1,
+.signup-panel h1 {
+  margin-bottom: 24px;
+}
+
+.login-form,
+.signup-form {
+  display: grid;
+  gap: 12px;
+}
+
+.login-form button,
+.signup-form button {
+  margin-top: 6px;
+}
+
+.auth-switch {
+  margin-top: 22px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.auth-switch button {
+  width: auto;
+  min-height: 0;
+  padding: 0;
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  font-weight: 700;
+}
+
+.auth-switch button:hover:not(:disabled) {
+  color: var(--accent-strong);
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+}
+
+@media (max-width: 720px) {
+  .login-panel,
+  .signup-panel {
+    padding: 24px;
+  }
+}

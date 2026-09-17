@@ -4,6 +4,7 @@ import { fetchTranscript } from "../services/fetch-transcript";
 import { defaultStyleData } from "../services/default-style-data";
 import Subtitle from "./subtitle";
 import { SessionExpired } from "../errors/session-expired";
+import "./edit.css"
 
 export function EditSession({ sessionId, videoUrl, styleData, setStyleData, transcript, setTranscript, onTranscribe, onSessionExpired, onError, job, onSetJob, onClearJob }) {
     const hasTranscript = transcript != null;

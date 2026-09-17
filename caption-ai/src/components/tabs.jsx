@@ -4,6 +4,7 @@ import { SessionExpired } from "../errors/session-expired"
 import { getSegmentStyle } from "../services/default-style-data"
 import { exportVideo } from "../services/export-video"
 import { useEffect } from "react"
+import "./tabs.css"
 
 
 export function CaptionTab() {

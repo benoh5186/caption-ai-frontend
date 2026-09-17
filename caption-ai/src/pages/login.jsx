@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { checkAuth } from "../services/auth-check"
+import "./auth.css"
 
 
 export default function Login({ onLoginSuccess, onSignUpClick }) {

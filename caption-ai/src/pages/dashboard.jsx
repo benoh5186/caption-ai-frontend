@@ -5,6 +5,7 @@ import { SessionExpired } from "../errors/session-expired"
 import { createSession } from "../services/create-session.jsx";
 import { deleteSession } from "../services/delete-session.jsx";
 import { SessionCountLimit } from "../errors/session-count.jsx";
+import "./dashboard.css"
 
 export default function Dashboard( {onSessionExpired} ) {
     const [sessions, setSessions] = useState([]);

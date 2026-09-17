@@ -1,5 +1,6 @@
 import { uploadVideo } from "../services/upload-video";
 import { useEffect, useState } from "react";
+import "./upload.css"
 import {fetchSessionVideo} from "../services/fetch-session-video"
 
 export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onClearJob}) {

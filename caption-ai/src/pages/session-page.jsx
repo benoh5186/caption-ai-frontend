@@ -10,6 +10,7 @@ import { EditSession } from "../components/edit";
 import { defaultStyleData } from "../services/default-style-data";
 import { autoSave, requestSave } from "../services/save-session";
 import { checkJobStatus } from "../services/check-job-status";
+import "./session-page.css"
 
 export default function SessionPage({sessionId, onSessionExpired}) {
     const [videoUrl, setVideoUrl] = useState(null);
@@ -172,5 +173,4 @@ export default function SessionPage({sessionId, onSessionExpired}) {
     )
 
     }
-
 

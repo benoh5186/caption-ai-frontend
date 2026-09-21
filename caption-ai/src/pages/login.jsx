@@ -7,7 +7,7 @@ export default function Login({ onLoginSuccess, onSignUpClick }) {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)
-    const [error, setError] = useState(false)
+    const [error, setError] = useState(null)
 
     useEffect(() => {
         async function authenticateUser() {
@@ -35,8 +35,13 @@ export default function Login({ onLoginSuccess, onSignUpClick }) {
             })
 
             if (!response.ok) {
-                console.log(response.status)
-                setError(true)
+                const status = response.status 
+                console.log(status)
+                if (status === 401) {
+                    setError({message : "Invalid email or password. Please try again."})
+                    return 
+                }
+                setError({message : "Couldn't login. Please try again later."})
                 return
             }
 
@@ -78,7 +83,7 @@ export default function Login({ onLoginSuccess, onSignUpClick }) {
 
                     {error && (
                         <p className="login-error" role="alert">
-                            Login failed. Please check your email and password.
+                            {error?.message}
                         </p>
                     )}
 

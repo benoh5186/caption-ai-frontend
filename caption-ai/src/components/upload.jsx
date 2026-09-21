@@ -6,7 +6,7 @@ import {fetchSessionVideo} from "../services/fetch-session-video"
 export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onClearJob}) {
     const[videoUploading, setVideoUploading] = useState(false);
     const [videoUrl, setVideoUrl] = useState(null);
-    const[uploadFailed, setUploadFailed] = useState(false);
+    const[uploadFailed, setUploadFailed] = useState(null);
     const [isDragging, setDragging] = useState(false);
 
     useEffect(() => {
@@ -68,7 +68,6 @@ export function Upload({sessionId, onUploadComplete, onError, job, onSetJob, onC
         try {
             const uploadJobId = await uploadVideo(sessionId, videoFile)
             onSetJob(uploadJobId)
-            const vidBlob = await 
             setVideoUrl({videoUrl: URL.createObjectURL(videoFile)})
         } 
         catch {
